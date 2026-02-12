@@ -55,3 +55,25 @@ class MonteCarloSimulator:
         balances_real = balances / inflation_factor
 
         return balances_real
+
+def simulate(
+    years: int,
+    start_balance: float,
+    monthly_contribution: float,
+    expected_return_annual: float,
+    volatility_annual: float,
+    inflation_annual: float,
+    simulations: int = 3000,
+    seed: int = 42
+):
+    sim = MonteCarloSimulator(
+        years=years,
+        start_balance=start_balance,
+        monthly_contribution=monthly_contribution,
+        expected_return_annual=expected_return_annual,
+        volatility_annual=volatility_annual,
+        inflation_annual=inflation_annual,
+        simulations=simulations,
+        seed=seed
+)
+    return sim.run()

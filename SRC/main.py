@@ -2,6 +2,9 @@ from simulator import MonteCarloSimulator
 import matplotlib.pyplot as plt
 import numpy as np
 
+from simulator import simulate
+from metrics import summarise, prob_reach_goal
+
 
 def main():
 
@@ -78,6 +81,30 @@ def main():
         again = input("\nRun another simulation? (y/n): ").lower()
         if again != "y":
             break
+
+        paths = simulate(
+        years=years,
+        start_balance=1000,
+        monthly_contribution=monthly,
+        expected_return_annual=params["r"],
+        volatility_annual=params["vol"],
+        inflation_annual=0.02,
+        simulations=3000,
+        seed=42
+        )
+
+        final_values = paths[:, -1]
+        summary = summarise(final_values)
+
+        print("\nResults:")
+        print("Median outcome:", round(summary["median"], 2))
+        print("10th percentile:", round(summary["p10"], 2))
+        print("90th percentile:", round(summary["p90"], 2))
+
+        if goal > 0:
+            p = prob_reach_goal(final_values, goal)
+            print(f"Chance of reaching £{goal:,.0f}: {p * 100:.2f}%")
+
 
 
 
